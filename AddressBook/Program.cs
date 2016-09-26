@@ -31,9 +31,18 @@ namespace AddressBook
             }
         }
 
-        static void Add(String address)
+        static void Add(string[] address)
         {
-            contacts.Add(address);
+            StringBuilder entry = new StringBuilder();
+            for (int i = 1; i < address.Length; ++i)
+            {
+                if (i > 1)
+                {
+                    entry.Append(' ');
+                }
+                entry.Append(address[i]);
+            }
+            contacts.Add(entry.ToString());
             List();
         }
 
@@ -63,7 +72,7 @@ namespace AddressBook
             {
                 if(args.Length > 1)
                 {
-                    Add(args[1]);
+                    Add(args);
                 }
                 else
                 {
