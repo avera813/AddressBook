@@ -37,12 +37,6 @@ namespace AddressBook
             System.Environment.Exit(1);
         }
 
-        static void ListContacts()
-        {
-            // Call Print method from AddressBook
-            contacts.Print();
-        }
-
         static Address ConvertToAddress(string input)
         {
             if (!String.IsNullOrEmpty(input))
@@ -75,7 +69,7 @@ namespace AddressBook
 
             if (args[0].ToLower().Equals("show"))
             {
-                ListContacts();
+                contacts.Print();
             }
             else if (args[0].ToLower().Equals("add"))
             {
@@ -88,7 +82,7 @@ namespace AddressBook
                 if (address != null)
                 {
                     contacts.AddAddress(address);
-                    ListContacts();
+                    contacts.Print();
                 }
                 else
                 {
@@ -108,7 +102,7 @@ namespace AddressBook
                 if (oldAddress != null && newAddress != null)
                 {
                     contacts.UpdateAddress(oldAddress, newAddress);
-                    ListContacts();
+                    contacts.Print();
                 }
                 else
                 {
@@ -126,7 +120,7 @@ namespace AddressBook
                 if (address != null)
                 {
                     contacts.RemoveAddress(address);
-                    ListContacts();
+                    contacts.Print();
                 }
                 else
                 {
