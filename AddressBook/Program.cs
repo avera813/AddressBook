@@ -8,11 +8,7 @@ namespace AddressBook
 {
     class Program
     {
-        static List<string> contacts = new List<string>()
-        {
-            "Joe Bloggs, 1 New St., Birmingham B01 3TN, UK",
-            "John Doe, 16 S 31st St., Boulder CO 80304, USA"
-        };
+        private static AddressBook contacts;
 
         static void Usage()
         {
@@ -21,75 +17,98 @@ namespace AddressBook
             Console.WriteLine("    list  - list the addresses.");
             Console.WriteLine("    add   - add to the addresses.");
             Console.WriteLine("    find  - find an address that matches.");
+            Console.WriteLine("    update  - edit or update an address that matches.");
+            Console.WriteLine("    remove  - remove an address that matches.");
             System.Environment.Exit(1);
         }
 
         static void List()
         {
-            for (int i = 0; i < contacts.Count; ++i) {
-                Console.WriteLine(contacts.ElementAt(i));
-            }
-        }
-
-        static void Add(string[] address)
-        {
-            StringBuilder entry = new StringBuilder();
-            for (int i = 1; i < address.Length; ++i)
+            Address[] addressList = contacts.GetAll();
+            for (int i = 0; i < addressList.Length; i++)
             {
-                if (i > 1)
-                {
-                    entry.Append(' ');
-                }
-                entry.Append(address[i]);
-            }
-            contacts.Add(entry.ToString());
-            List();
-        }
-
-        static void Find(String text)
-        {
-            foreach(String s in contacts)
-            {
-                if (s.IndexOf(text, StringComparison.CurrentCultureIgnoreCase) > -1)
-                {
-                    Console.WriteLine(s);
-                }
+                Console.WriteLine(addressList[i].ToString());
             }
         }
 
-        static void Main(String[] args)
+        static void Main(string[] args)
         {
-            if (null == args || 0 == args.Length || args[0].Equals(""))
+            contacts = new AddressBook();
+
+            if (null == args || 0 == args.Length || args[0].Equals(" "))
             {
                 Usage();
             }
 
-            if (args[0].Equals("list"))
+            if (args[0].Equals("list", StringComparison.CurrentCultureIgnoreCase))
             {
                 List();
-            } 
-            else if (args[0].Equals("add")) 
+            }
+            else if (args[0].Equals("add", StringComparison.CurrentCultureIgnoreCase))
             {
-                if(args.Length > 1)
+                if (args.Length < 2)
                 {
-                    Add(args);
+                    Usage();
                 }
                 else
                 {
-                    Console.WriteLine("Usage: AddressBook add [text]");
+                    string[] address = args[1].Split(',');
+                    
+                    if (address.Length == 6)
+                    {
+                        string nameToAdd = address[0].Trim();
+                        string streetToAdd = address[1].Trim();
+                        string cityToAdd = address[2].Trim();
+                        string stateToAdd = address[3].Trim();
+                        string zipToAdd = address[4].Trim();
+                        string countryToAdd = address[5].Trim();
+
+                        contacts.Add(new Address(nameToAdd, streetToAdd, cityToAdd, stateToAdd, zipToAdd, countryToAdd));
+
+                        List();
+                    }
+                    else
+                    {
+                        Usage();
+                    }
                 }
-            } 
-            else if (args[0].Equals("find"))
+            }
+            else if (args[0].Equals("update", StringComparison.CurrentCultureIgnoreCase))
             {
-                if(args.Length > 1)
+                Console.WriteLine();
+            }
+            else if (args[0].Equals("remove", StringComparison.CurrentCultureIgnoreCase))
+            {
+                if (args.Length < 2)
                 {
-                    Find(args[1]);
+                    Usage();
                 }
                 else
                 {
-                    Console.WriteLine("Usage: AddressBook find [query]");
+                    string[] address = args[1].Split(',');
+
+                    if (address.Length == 6)
+                    {
+                        string nameToRemove = address[0].Trim();
+                        string streetToRemove = address[1].Trim();
+                        string cityToRemove = address[2].Trim();
+                        string stateToRemove = address[3].Trim();
+                        string zipToRemove = address[4].Trim();
+                        string countryToRemove = address[5].Trim();
+
+                        contacts.Remove(new Address(nameToRemove, streetToRemove, cityToRemove, stateToRemove, zipToRemove, countryToRemove));
+
+                        List();
+                    }
+                    else
+                    {
+                        Usage();
+                    }
                 }
-            } 
+            }
+
+            // perhaps we'll consider find, sort, print some other week
+
             else
             {
                 Usage();
