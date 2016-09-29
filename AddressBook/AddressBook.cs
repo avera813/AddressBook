@@ -19,9 +19,10 @@ namespace AddressBook
         public AddressBook()
         {
             numberOfAddressBooks++;
-            addresses = new Address[2];
+            addresses = new Address[3];
             addresses[0] = new Address("Joe Bloggs", "1 New St.", "Birmingham", "England", "B01 3TN", "UK");
-            addresses[1] = new Address("John Doe", "16 S 31st St.", "Boulder", "CO", "80304", "USA");
+            addresses[1] = new Address("Jane Smith", "123 Fake St.", "Denver", "CO", "80123", "USA");
+            addresses[2] = new Address("John Doe", "16 S 31st St.", "Boulder", "CO", "80304", "USA");
         }
 
         private int findIndex(Address address)
@@ -37,7 +38,7 @@ namespace AddressBook
             return addresses;
         }
 
-        public void Add(Address addressToAdd)
+        public void AddAddress(Address addressToAdd)
         {
             int index = findIndex(addressToAdd);
             if (!(index >= 0 && index < addresses.Length))
@@ -54,13 +55,13 @@ namespace AddressBook
             }
         }
 
-        public void Update(Address oldAddress, Address updatedAddress)
+        public void UpdateAddress(Address oldAddress, Address updatedAddress)
         {
             int index = findIndex(oldAddress);
             this.addresses[index] = updatedAddress;
         }
 
-        public void Remove(Address addressToRemove)
+        public void RemoveAddress(Address addressToRemove)
         {
             int index = findIndex(addressToRemove);
             if(index >= 0 && index < addresses.Length)
@@ -94,8 +95,12 @@ namespace AddressBook
         //{
         //}
 
-        //public void Print() // What does this method even mean? 
-        //{
-        //}
+        public void Print() // Print contacts
+        {
+            foreach (Address address in addresses)
+            {
+                Console.WriteLine(address.ToString());
+            }
+        }
     }
 }
