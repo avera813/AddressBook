@@ -87,6 +87,27 @@ namespace AddressBook
               this.country.Equals(other.Country);
         }
 
+        public static Address ConvertToAddress(string input)
+        {
+            if (!String.IsNullOrEmpty(input))
+            {
+                string[] address = input.Split(',');
+
+                if (address.Length == 6)
+                {
+                    string name = address[0].Trim();
+                    string street = address[1].Trim();
+                    string city = address[2].Trim();
+                    string state = address[3].Trim();
+                    string zip = address[4].Trim();
+                    string country = address[5].Trim();
+                    return new Address(name, street, city, state, zip, country);
+                }
+                return null;
+            }
+            return null;
+        }
+
         override public string ToString()
         {
             return name + ", " + street + ", " + city + ", " + state + ", " + zip + ", " + country;
