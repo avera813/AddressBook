@@ -8,8 +8,7 @@ namespace AddressBook
 {
     public class AddressBook
     {
-        //private Address[] addresses;
-        private List<Address> addresses = new List<Address>();
+        private Dictionary<string, Address> addresses;
 
         private static int numberOfAddressBooks = 0;
         public static int countAddressBooks()
@@ -19,68 +18,79 @@ namespace AddressBook
 
         public AddressBook()
         {
+            addresses = new Dictionary<string, Address>();
             numberOfAddressBooks++;
-            addresses.Add(new Address("Joe Bloggs", "1 New St.", "Birmingham", "England", "B01 3TN", "UK"));
-            addresses.Add(new Address("Jane Smith", "123 Fake St.", "Denver", "CO", "80123", "USA"));
-            addresses.Add(new Address("John Doe", "16 S 31st St.", "Boulder", "CO", "80304", "USA"));
         }
 
-        private int findIndex(Address address)
-        {
-            
-            for (int index = 0; index < addresses.Count(); ++index)
-                if (addresses.ElementAt(index).Equals(address))
-                    return index;
-            return -1;  // not found, returning an "impossible?" index
-        }
-
-        public List<Address> GetAll()
+        public Dictionary<string, Address> GetAll()
         {
             return addresses;
         }
 
-        public void AddAddress(Address addressToAdd)
+        public void Add(string name, Address address)
         {
-            int index = findIndex(addressToAdd);
-            if (!(index >= 0 && index < addresses.Count()))
+            if (!addresses.ContainsKey(name))
+                addresses.Add(name, address);
+        }
+        
+        public void Update(string name, string keyToUpdate, string newValue)
+        {
+            if (addresses.ContainsKey(name))
             {
-                addresses.Add(addressToAdd);
+                if (!keyToUpdate.Equals("name"))
+                {
+                    addresses[name].setSpec(keyToUpdate, newValue);
+                }
+                else if(keyToUpdate.Equals("name") && addresses.ContainsKey(name))
+                {
+                    Address tempAddress = addresses[name];
+                    addresses.Remove(name);
+                    addresses.Add(newValue, tempAddress);
+                }
             }
         }
-
-        public void UpdateAddress(Address oldAddress, Address updatedAddress)
+        
+        public void Remove(string name)
         {
-            int index = findIndex(oldAddress);
-            if (index >= 0 && index < addresses.Count())
-            {
-                addresses.RemoveAt(index);
-                addresses.Insert(index, updatedAddress);
-            }
+            if (addresses.ContainsKey(name))
+                addresses.Remove(name);
         }
 
-        public void RemoveAddress(Address addressToRemove)
+        public Dictionary<string,Address> Find(string key, string query)
         {
-            int index = findIndex(addressToRemove);
-            if (index >= 0 && index < addresses.Count())
+            key = key.ToLower();
+            query = query.ToLower();
+
+            Dictionary<string, Address> tempAddressBook = new Dictionary<string, Address>();
+            foreach (KeyValuePair<string, Address> pair in addresses)
             {
-                addresses.RemoveAt(index);
+                if (pair.Value.getSpec(key).ToLower().Contains(query) || key.Equals("name") && pair.Key.ToLower().Contains(query))
+                {
+                    tempAddressBook.Add(pair.Key, pair.Value);
+                }
             }
+            return tempAddressBook;
         }
 
-        //public Address Find(string search) // future enhancement?
-        //{
-        //}
-
-        //public void Sort() // What does this even mean?
-        //{
-        //}
-
-        public void Print() // Print contacts
+        public void Sort(string key)
         {
-            foreach (Address address in addresses)
-            {
-                Console.WriteLine(address.ToString());
+            key = key.ToLower();
+            Dictionary<string, Address> tempList = new Dictionary<string, Address>();
+            if (key.Equals("name"))
+            {                
+                foreach (KeyValuePair<string, Address> item in addresses.OrderBy(prop => prop.Key))
+                {
+                    tempList.Add(item.Key, item.Value);
+                }
             }
+            else
+            {
+                foreach (KeyValuePair<string, Address> item in addresses.OrderBy(prop => prop.Value.getSpec(key)))
+                {
+                    tempList.Add(item.Key, item.Value);
+                }
+            }
+            addresses = tempList;
         }
     }
 }
