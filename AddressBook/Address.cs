@@ -8,71 +8,37 @@ namespace AddressBook
 {
     public class Address
     {
-        private string name;  // the name field 
-        public string Name    // the Name property
-        {
-            get
-            {
-                return name;
-            }
-        }
-
-        private string street;  // the street field 
-        public string Street    // the Street property
-        {
-            get
-            {
-                return street;
-            }
-        }
-
-        private string city;  // the city field 
-        public string City    // the City property
-        {
-            get
-            {
-                return city;
-            }
-        }
-
-        private string state;  // the state field 
-        public string State    // the State property
-        {
-            get
-            {
-                return state;
-            }
-        }
-
-        private string zip;  // the zip field 
-        public string Zip    // the Zip property
-        {
-            get
-            {
-                return zip;
-            }
-        }
-
-        private string country;  // the country field 
-        public string Country    // the Country property
-        {
-            get
-            {
-                return country;
-            }
-        }
+        private Dictionary<string, string> address;
 
         // Constructor for an Address
-        public Address(String name, String street, String city, String state, String zip, String country)
+        public Address(string street, string city, string state, string zip, string country)
         {
-            this.name = name;
-            this.street = street;
-            this.city = city;
-            this.state = state;
-            this.zip = zip;
-            this.country = country;
+            address = new Dictionary<string, string>();
+            address.Add("street", "");
+            address.Add("city", "");
+            address.Add("state", "");
+            address.Add("zip", "");
+            address.Add("country", "");
         }
 
+        public void setSpec(string key, string value)
+        {
+            if(address.ContainsKey(key))
+            {
+                address.Remove(key);
+                address.Add(key, value);
+            }
+        }
+
+        public string getSpec(string key)
+        {
+            if(address.ContainsKey(key))
+            {
+                return address[key];
+            }
+            return "";
+        }
+        /*
         public bool Equals(Address other)
         {
             if (other == null)
@@ -107,10 +73,10 @@ namespace AddressBook
             }
             return null;
         }
-
+        */
         override public string ToString()
         {
-            return name + ", " + street + ", " + city + ", " + state + ", " + zip + ", " + country;
+            return address["street"] + ", " + address["city"] + ", " + address["state"] + ", " + address["zip"] + ", " + address["country"];
         }
     }
 }
