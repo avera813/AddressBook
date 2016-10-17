@@ -69,14 +69,10 @@ namespace AddressBook
         public void Sort(string key)
         {
             key = key.ToLower();
-            Dictionary<string, Address> tempList = new Dictionary<string, Address>();
-            if (key.Equals("name"))              
-                foreach (KeyValuePair<string, Address> item in addresses.OrderBy(prop => prop.Key))
-                    tempList.Add(item.Key, item.Value);
+            if (key.Equals("name"))
+                addresses = addresses.OrderBy(prop => prop.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
             else
-                foreach (KeyValuePair<string, Address> item in addresses.OrderBy(prop => prop.Value.getSpec(key)))
-                    tempList.Add(item.Key, item.Value);
-            addresses = tempList;
+                addresses = addresses.OrderBy(prop => prop.Value.getSpec(key)).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
     }
 }
