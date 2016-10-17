@@ -41,7 +41,7 @@ namespace AddressBook
                 {
                     addresses[name].setSpec(keyToUpdate, newValue);
                 }
-                else if(keyToUpdate.Equals("name") && addresses.ContainsKey(name))
+                else
                 {
                     Address tempAddress = addresses[name];
                     addresses.Remove(name);
@@ -61,14 +61,8 @@ namespace AddressBook
             key = key.ToLower();
             query = query.ToLower();
 
-            Dictionary<string, Address> tempAddressBook = new Dictionary<string, Address>();
-            foreach (KeyValuePair<string, Address> pair in addresses)
-            {
-                if (pair.Value.getSpec(key).ToLower().Contains(query) || key.Equals("name") && pair.Key.ToLower().Contains(query))
-                {
-                    tempAddressBook.Add(pair.Key, pair.Value);
-                }
-            }
+            Dictionary<string, Address> tempAddressBook = addresses.Where(pair => key.Equals("name") && pair.Key.ToLower().Contains(query) || !key.Equals("name") && pair.Value.getSpec(key).ToLower().Contains(query)).ToDictionary(pair => pair.Key,pair => pair.Value);
+
             return tempAddressBook;
         }
 
@@ -76,20 +70,12 @@ namespace AddressBook
         {
             key = key.ToLower();
             Dictionary<string, Address> tempList = new Dictionary<string, Address>();
-            if (key.Equals("name"))
-            {                
+            if (key.Equals("name"))              
                 foreach (KeyValuePair<string, Address> item in addresses.OrderBy(prop => prop.Key))
-                {
                     tempList.Add(item.Key, item.Value);
-                }
-            }
             else
-            {
                 foreach (KeyValuePair<string, Address> item in addresses.OrderBy(prop => prop.Value.getSpec(key)))
-                {
                     tempList.Add(item.Key, item.Value);
-                }
-            }
             addresses = tempList;
         }
     }

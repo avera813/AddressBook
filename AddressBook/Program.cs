@@ -19,10 +19,10 @@ namespace AddressBook
                     Console.WriteLine("Usage: AddressBook add \"John Smith, 123 Fake St., Seattle, WA, 98101, USA\"");
                     break;
                 case "update":
-                    Console.WriteLine("Usage: AddressBook update \"John Smith, 123 Fake St., Seattle, WA, 98101, USA\" \"Jane Doe, 456 Superior St., Bellevue, WA, 98004, USA\"");
+                    Console.WriteLine("Usage: AddressBook update \"John Smith\" street \"456 Superior St.\"");
                     break;
                 case "remove":
-                    Console.WriteLine("Usage: AddressBook remove \"John Smith, 123 Fake St., Seattle, WA, 98101, USA\"");
+                    Console.WriteLine("Usage: AddressBook remove \"John Smith\"");
                     break;
                 case "find":
                     Console.WriteLine("Usage: AddressBook find name \"John\"");

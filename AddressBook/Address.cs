@@ -25,10 +25,7 @@ namespace AddressBook
         {
             key = key.ToLower();
             if(address.ContainsKey(key))
-            {
-                address.Remove(key);
-                address.Add(key, value);
-            }
+                address[key] = value;
         }
 
         public string getSpec(string key)
