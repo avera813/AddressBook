@@ -35,11 +35,13 @@ namespace AddressBook
                 default:
                     Console.WriteLine("Usage: AddressBook [command] ");
                     Console.WriteLine("Where command is one of: ");
-                    Console.WriteLine("    show  - list the addresses.");
-                    Console.WriteLine("    add   - add to the addresses.");
-                    Console.WriteLine("    update  - edit or update an address that matches.");
+                    
+                    Console.WriteLine("    add     - add to the addresses.");
+                    Console.WriteLine("    find    - find an address that matches.");
                     Console.WriteLine("    remove  - remove an address that matches.");
-                    Console.WriteLine("    sort  - sort addresses based on field.");
+                    Console.WriteLine("    show    - list the addresses.");
+                    Console.WriteLine("    sort    - sort addresses based on field.");
+                    Console.WriteLine("    update  - edit or update an address that matches.");
                     break;
             }
             Console.ResetColor();
