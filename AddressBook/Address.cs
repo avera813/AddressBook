@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AddressBook
 {
+    [Serializable]
     public class Address
     {
         private Dictionary<string, string> address;

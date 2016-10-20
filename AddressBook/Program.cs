@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -56,23 +59,68 @@ namespace AddressBook
             }
         }
 
+        /// <summary>
+        /// AddressBook file to read. If file does not exists, the application will create a new one.
+        /// </summary>
+        /// <param name="fileName"></param>
+        static void ReadFile(string fileName)
+        {
+            FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
+            BinaryFormatter bf = new BinaryFormatter();
+            try
+            {
+                contacts = (AddressBook)bf.Deserialize(fs);
+            }
+            // If stream is empty, create a new addressbook object
+            catch
+            {
+                contacts = new AddressBook();
+
+                // Create addresses when a new file is made.
+                contacts.Add("Joe Bloggs", new Address("1 New St.", "Birmingham", "England", "B01 3TN", "UK"));
+                contacts.Add("Jane Smith", new Address("123 Fake St.", "Denver", "CO", "80123", "USA"));
+                contacts.Add("John Doe", new Address("16 S 31st St.", "Boulder", "CO", "80304", "USA"));
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+
+        /// <summary>
+        /// AddressBook file to write to. If file exists, the file is overwritten with new content.
+        /// </summary>
+        /// <param name="fileName"></param>
+        static void WriteFile(string fileName)
+        {
+            FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
+            BinaryFormatter bf = new BinaryFormatter();
+            try
+            {
+                bf.Serialize(fs, contacts);
+            }
+            catch (SerializationException ex)
+            {
+                Console.WriteLine("Failed to serialize. Reason: " + ex.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+
         static void Main(string[] args)
         {
+            ReadFile("addresses.dat");
             if (args == null || args.Length == 0 || args[0].Equals(" "))
             {
                 Usage();
             }
-
-            contacts = new AddressBook();
-            contacts.Add("Joe Bloggs", new Address("1 New St.", "Birmingham", "England", "B01 3TN", "UK"));
-            contacts.Add("Jane Smith", new Address("123 Fake St.", "Denver", "CO", "80123", "USA"));
-            contacts.Add("John Doe", new Address("16 S 31st St.", "Boulder", "CO", "80304", "USA"));
-
             if (args[0].ToLower().Equals("show"))
             {
                 PrintContacts(contacts.GetAll());
-            }
-            
+            }            
             else if (args[0].ToLower().Equals("add"))
             {
                 if (args.Length != 2)
@@ -84,7 +132,7 @@ namespace AddressBook
                     Usage("add");
 
                 contacts.Add(entry[0], new Address(entry[1], entry[2], entry[3], entry[4], entry[5]));
-                PrintContacts(contacts.GetAll());
+                WriteFile("addresses.dat");
             }
             else if (args[0].ToLower().Equals("update"))
             {
@@ -96,7 +144,7 @@ namespace AddressBook
                 string newValue = args[3];
 
                 contacts.Update(name, keyToUpdate, newValue);
-                PrintContacts(contacts.GetAll());
+                WriteFile("addresses.dat");
             }
             else if (args[0].ToLower().Equals("remove"))
             {
@@ -106,7 +154,7 @@ namespace AddressBook
                 string name = args[1];
 
                 contacts.Remove(name);
-                PrintContacts(contacts.GetAll());
+                WriteFile("addresses.dat");
             }
             else if (args[0].ToLower().Equals("find"))
             {
@@ -122,7 +170,7 @@ namespace AddressBook
                     Usage("sort");
 
                 contacts.Sort(args[1]);
-                PrintContacts(contacts.GetAll());
+                WriteFile("addresses.dat");
             }
             else
             {
