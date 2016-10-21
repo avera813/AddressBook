@@ -15,7 +15,7 @@ namespace AddressBook
         {
             return INSTANCE;
         }
-        public IAddressBookOutput GetOutput(string format)
+        public AddressBookOutput GetOutput(string format)
         {
             format = format.ToUpper();
             switch (format)

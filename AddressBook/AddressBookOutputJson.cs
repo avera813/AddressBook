@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AddressBook
 {
-    class AddressBookOutputJson : IAddressBookOutput
+    class AddressBookOutputJson : AddressBookOutput
     {
-        private string GetLine(KeyValuePair<string, Address> address)
+        protected override string GetLine(KeyValuePair<string, Address> address)
         {
             string output = "{";
             output += System.Environment.NewLine;
@@ -23,7 +23,7 @@ namespace AddressBook
             output += "}";
             return output;
         }
-        public string ToString(Dictionary<string, Address> addressBook)
+        public override string ToString(Dictionary<string, Address> addressBook)
         {
             string output = "[";
             for (int i = 0; i < addressBook.Count; ++i)

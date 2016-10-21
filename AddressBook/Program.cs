@@ -60,7 +60,7 @@ namespace AddressBook
         static void PrintContacts(Dictionary<string, Address> entries, string format = "")
         {
             format = format.ToUpper();
-            IAddressBookOutput addressBook = AddressBookSingleton.GetInstance().GetOutput(format);
+            AddressBookOutput addressBook = AddressBookSingleton.GetInstance().GetOutput(format);
 
             Console.WriteLine(addressBook.ToString(entries));
         }

@@ -52,7 +52,7 @@
     <Compile Include="AddressBookSingleton.cs" />
     <Compile Include="CheckFile.cs" />
     <Compile Include="ConsoleCommand.cs" />
-    <Compile Include="IAddressBookOutput.cs" />
+    <Compile Include="AddressBookOutput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
