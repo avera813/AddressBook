@@ -11,16 +11,9 @@ namespace AddressBook
     {
         private Dictionary<string, Address> addresses;
 
-        private static int numberOfAddressBooks = 0;
-        public static int countAddressBooks()
-        {
-            return numberOfAddressBooks;
-        }
-
         public AddressBook()
         {
             addresses = new Dictionary<string, Address>();
-            numberOfAddressBooks++;
         }
 
         public Dictionary<string, Address> GetAll()

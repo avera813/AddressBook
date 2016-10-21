@@ -11,27 +11,35 @@ namespace AddressBook
         private static AddressBook contacts;
         private static string fileName;
 
-        static void Usage(ConsoleCommand command = ConsoleCommand.None)
+        /// <summary>
+        /// Displays help information for command if usage is not correct.
+        /// </summary>
+        /// <param name="command"></param>
+        static void Usage(ConsoleCommand command = ConsoleCommand.NONE)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             switch (command)
             {
-                case ConsoleCommand.Add:
+                case ConsoleCommand.ADD:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" add \"John Smith, 123 Fake St., Seattle, WA, 98101, USA\"");
                     break;
-                case ConsoleCommand.Update:
+                case ConsoleCommand.UPDATE:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" update \"John Smith\" street \"456 Superior St.\"");
                     break;
-                case ConsoleCommand.Remove:
+                case ConsoleCommand.REMOVE:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" remove \"John Smith\"");
                     break;
-                case ConsoleCommand.Find:
+                case ConsoleCommand.FIND:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" find name \"John\"");
                     Console.WriteLine("    seach by: name, street, city, state, zip, or country");
                     break;
-                case ConsoleCommand.Sort:
+                case ConsoleCommand.SORT:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" sort name");
                     Console.WriteLine("    sort by: name, street, city, state, zip, or country");
+                    break;
+                case ConsoleCommand.PRINT:
+                    Console.WriteLine("Usage: AddressBook \"addressbook.dat\" print [format]");
+                    Console.WriteLine("    available formats: XML, TEXT");
                     break;
                 default:
                     Console.WriteLine("Usage: AddressBook \"[filename]\" [command] ");
@@ -49,11 +57,12 @@ namespace AddressBook
             System.Environment.Exit(1);
         }
 
-        static void PrintContacts(Dictionary<string, Address> entries)
+        static void PrintContacts(Dictionary<string, Address> entries, string output = "")
         {
+            IAddressBookOutput addressBook = AddressBookSingleton.GetInstance().GetOutput(output);
             foreach (KeyValuePair<string, Address> entry in entries)
             {
-                Console.WriteLine(entry.Key.ToString() + ", " + entry.Value.ToString());
+                Console.WriteLine(addressBook.ToString(entry));
             }
         }
 
@@ -109,12 +118,12 @@ namespace AddressBook
             {
                 ReadFile(fileName, true);
                 if (args.Length != 3)
-                    Usage(ConsoleCommand.Add);
+                    Usage(ConsoleCommand.ADD);
 
                 string[] entry = args[2].Split(',').Select(prop => prop.Trim()).ToArray();
 
                 if (entry.Length != 6)
-                    Usage(ConsoleCommand.Add);
+                    Usage(ConsoleCommand.ADD);
 
                 contacts.Add(entry[0], new Address(entry[1], entry[2], entry[3], entry[4], entry[5]));
                 WriteFile(fileName);
@@ -123,7 +132,7 @@ namespace AddressBook
             {
                 ReadFile(fileName, false);
                 if (args.Length != 5)
-                    Usage(ConsoleCommand.Update);
+                    Usage(ConsoleCommand.UPDATE);
 
                 string name = args[2];
                 string keyToUpdate = args[3];
@@ -136,7 +145,7 @@ namespace AddressBook
             {
                 ReadFile(fileName, false);
                 if (args.Length != 3)
-                    Usage(ConsoleCommand.Remove);
+                    Usage(ConsoleCommand.REMOVE);
 
                 string name = args[2];
                 contacts.Remove(name);
@@ -146,7 +155,7 @@ namespace AddressBook
             {
                 ReadFile(fileName, false);
                 if (args.Length != 4)
-                    Usage(ConsoleCommand.Find);
+                    Usage(ConsoleCommand.FIND);
 
                 Dictionary<string, Address> found = contacts.Find(args[2], args[3]);
                 PrintContacts(found);
@@ -155,10 +164,18 @@ namespace AddressBook
             {
                 ReadFile(fileName, false);
                 if (args.Length != 3)
-                    Usage(ConsoleCommand.Sort);
+                    Usage(ConsoleCommand.SORT);
 
                 contacts.Sort(args[2]);
                 WriteFile(fileName);
+            }
+            else if(args[1].ToLower().Equals("print"))
+            {
+                ReadFile(fileName, true);
+                if (args.Length != 3)
+                    Usage(ConsoleCommand.PRINT);
+
+                PrintContacts(contacts.GetAll(), args[2]);
             }
             else
             {

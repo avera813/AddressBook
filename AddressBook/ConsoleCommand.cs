@@ -8,11 +8,12 @@ namespace AddressBook
 {
     enum ConsoleCommand
     {
-        None,
-        Add,
-        Update,
-        Remove,
-        Find,
-        Sort
+        NONE,
+        ADD,
+        UPDATE,
+        REMOVE,
+        FIND,
+        SORT,
+        PRINT
     }
 }

@@ -36,6 +36,12 @@ namespace AddressBook
                 return address[key];
             return "";
         }
+
+        public Dictionary<string, string> GetAddress()
+        {
+            return address;
+        }
+
         override public string ToString()
         {
             return String.Join(", ", address.Values);

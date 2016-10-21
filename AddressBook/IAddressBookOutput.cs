@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace AddressBook
 {
-    enum FileAccess
+    interface IAddressBookOutput
     {
-        Read,
-        Write
+        string ToString(KeyValuePair<string, Address> address);
     }
 }
