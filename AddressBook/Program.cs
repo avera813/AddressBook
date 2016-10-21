@@ -39,7 +39,7 @@ namespace AddressBook
                     break;
                 case ConsoleCommand.PRINT:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" print [format]");
-                    Console.WriteLine("    available formats: JSON, XML, TEXT");
+                    Console.WriteLine("    Format is optional. Available formats: JSON, XML, TEXT");
                     break;
                 default:
                     Console.WriteLine("Usage: AddressBook \"[filename]\" [command] ");
@@ -48,7 +48,7 @@ namespace AddressBook
                     Console.WriteLine("    add     - add to the addresses.");
                     Console.WriteLine("    find    - find an address that matches.");
                     Console.WriteLine("    remove  - remove an address that matches.");
-                    Console.WriteLine("    show    - list the addresses.");
+                    Console.WriteLine("    print    - list the addresses.");
                     Console.WriteLine("    sort    - sort addresses based on field.");
                     Console.WriteLine("    update  - edit or update an address that matches.");
                     break;
@@ -116,12 +116,7 @@ namespace AddressBook
 
             fileName = args[0];
 
-            if (args[1].ToLower().Equals("show"))
-            {
-                ReadFile(fileName, false);
-                PrintContacts(contacts.GetAll());
-            }
-            else if (args[1].ToLower().Equals("add"))
+            if (args[1].ToLower().Equals("add"))
             {
                 ReadFile(fileName, true);
                 if (args.Length != 3)
@@ -178,11 +173,14 @@ namespace AddressBook
             }
             else if(args[1].ToLower().Equals("print"))
             {
-                ReadFile(fileName, true);
-                if (args.Length != 3)
+                ReadFile(fileName, false);
+                if (args.Length != 2 && args.Length != 3)
                     Usage(ConsoleCommand.PRINT);
 
-                PrintContacts(contacts.GetAll(), args[2]);
+                if(args.Length == 3)
+                    PrintContacts(contacts.GetAll(), args[2]);
+                else
+                    PrintContacts(contacts.GetAll());
             }
             else
             {
