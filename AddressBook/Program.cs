@@ -65,25 +65,27 @@ namespace AddressBook
         /// <param name="fileName"></param>
         static void ReadFile(string fileName)
         {
-            FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
-            BinaryFormatter bf = new BinaryFormatter();
             try
             {
-                contacts = (AddressBook)bf.Deserialize(fs);
+                CheckFile checkFile = new CheckFile(fileName);
+                FileStream fs = checkFile.GetReadFileStream();
+                try
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    contacts = (AddressBook)bf.Deserialize(fs);
+                }
+                catch (SerializationException ex)
+                {
+                    Console.WriteLine("Failed to read contents of file. Reason: " + ex.Message);
+                }
+                finally
+                {
+                    fs.Close();
+                }
             }
-            // If stream is empty, create a new addressbook object
-            catch
+            catch (Exception ex)
             {
-                contacts = new AddressBook();
-
-                // Create addresses when a new file is made.
-                contacts.Add("Joe Bloggs", new Address("1 New St.", "Birmingham", "England", "B01 3TN", "UK"));
-                contacts.Add("Jane Smith", new Address("123 Fake St.", "Denver", "CO", "80123", "USA"));
-                contacts.Add("John Doe", new Address("16 S 31st St.", "Boulder", "CO", "80304", "USA"));
-            }
-            finally
-            {
-                fs.Close();
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -93,26 +95,34 @@ namespace AddressBook
         /// <param name="fileName"></param>
         static void WriteFile(string fileName)
         {
-            FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
-            BinaryFormatter bf = new BinaryFormatter();
             try
             {
-                bf.Serialize(fs, contacts);
+                CheckFile checkFile = new CheckFile(fileName);
+                FileStream fs = checkFile.GetWriteFileStream();
+                try
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, contacts);
+                }
+                catch (SerializationException ex)
+                {
+                    Console.WriteLine("Failed to write contents of file. Reason: " + ex.Message);
+                }
+                finally
+                {
+                    fs.Close();
+                }
             }
-            catch (SerializationException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine("Failed to serialize. Reason: " + ex.Message);
-                throw;
-            }
-            finally
-            {
-                fs.Close();
+                Console.WriteLine(ex.Message);
             }
         }
 
         static void Main(string[] args)
         {
-            ReadFile("addresses.dat");
+            contacts = new AddressBook();
+            ReadFile(@"c:\test\addresses.dat");
             if (args == null || args.Length == 0 || args[0].Equals(" "))
             {
                 Usage();
