@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,27 +11,22 @@ namespace AddressBook
 {
     class CheckFile
     {
-        private string fileName;
-
-        public CheckFile(string fileName)
-        {
-            this.fileName = fileName;
-        }
-
-        public FileStream GetReadFileStream()
+        public static FileStream GetReadFileStream(string fileName, bool ignoreNotFound)
         {
             FileStream fs = null;
             try
             {
-                fs = File.OpenRead(fileName);
+                fs = File.OpenRead(@fileName);
             }
             catch (DirectoryNotFoundException)
             {
-                throw new DirectoryNotFoundException("Cannot find directory: " + fileName);
+                if(!ignoreNotFound)
+                    throw new DirectoryNotFoundException("Cannot find directory: " + fileName);
             }
             catch (FileNotFoundException)
             {
-                throw new FileNotFoundException("Cannot find file: " + fileName);
+                if(!ignoreNotFound)
+                    throw new FileNotFoundException("Cannot find file: " + fileName);
             }
             catch (UnauthorizedAccessException)
             {
@@ -38,12 +35,12 @@ namespace AddressBook
             return fs;
         }
 
-        public FileStream GetWriteFileStream()
+        public static FileStream GetWriteFileStream(string fileName)
         {
             FileStream fs = null;
             try
             {
-                fs = new FileStream(fileName, FileMode.OpenOrCreate);
+                fs = new FileStream(@fileName, FileMode.OpenOrCreate);
             }
             catch (DirectoryNotFoundException)
             {
