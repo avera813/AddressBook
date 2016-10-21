@@ -8,21 +8,20 @@ namespace AddressBook
 {
     class AddressBookSingleton
     {
-        private static AddressBookSingleton INSTANCE = new AddressBookSingleton();
+        private static readonly AddressBookSingleton Instance = new AddressBookSingleton();
         private AddressBookSingleton() { }
 
         public static AddressBookSingleton GetInstance()
         {
-            return INSTANCE;
+            return Instance;
         }
-        public AddressBookOutput GetOutput(string format)
+        public AddressBookOutput GetOutput(AddressBookOutputFormat format)
         {
-            format = format.ToUpper();
             switch (format)
             {
-                case "JSON":
+                case AddressBookOutputFormat.JSON:
                     return new AddressBookOutputJson();
-                case "XML":
+                case AddressBookOutputFormat.XML:
                     return new AddressBookOutputXml();
                 default:
                     return new AddressBookOutputText();

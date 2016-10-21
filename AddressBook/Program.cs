@@ -57,11 +57,19 @@ namespace AddressBook
             System.Environment.Exit(1);
         }
 
+        /// <summary>
+        /// Determines format to output based on passed format argument
+        /// </summary>
+        /// <param name="entries"></param>
+        /// <param name="format"></param>
         static void PrintContacts(Dictionary<string, Address> entries, string format = "")
         {
             format = format.ToUpper();
-            AddressBookOutput addressBook = AddressBookSingleton.GetInstance().GetOutput(format);
+            AddressBookOutputFormat outputFormat = AddressBookOutputFormat.TEXT;
+            if(Enum.IsDefined(typeof(AddressBookOutputFormat), format))
+                outputFormat = (AddressBookOutputFormat)Enum.Parse(typeof(AddressBookOutputFormat), format);
 
+            AddressBookOutput addressBook = AddressBookSingleton.GetInstance().GetOutput(outputFormat);
             Console.WriteLine(addressBook.ToString(entries));
         }
 
