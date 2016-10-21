@@ -8,6 +8,6 @@ namespace AddressBook
 {
     interface IAddressBookOutput
     {
-        string ToString(KeyValuePair<string, Address> address);
+        string ToString(Dictionary<string, Address> addressBook);
     }
 }

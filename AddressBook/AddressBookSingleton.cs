@@ -20,6 +20,8 @@ namespace AddressBook
             format = format.ToUpper();
             switch (format)
             {
+                case "JSON":
+                    return new AddressBookOutputJson();
                 case "XML":
                     return new AddressBookOutputXml();
                 default:

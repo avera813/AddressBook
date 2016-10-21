@@ -39,7 +39,7 @@ namespace AddressBook
                     break;
                 case ConsoleCommand.PRINT:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" print [format]");
-                    Console.WriteLine("    available formats: XML, TEXT");
+                    Console.WriteLine("    available formats: JSON, XML, TEXT");
                     break;
                 default:
                     Console.WriteLine("Usage: AddressBook \"[filename]\" [command] ");
@@ -57,13 +57,12 @@ namespace AddressBook
             System.Environment.Exit(1);
         }
 
-        static void PrintContacts(Dictionary<string, Address> entries, string output = "")
+        static void PrintContacts(Dictionary<string, Address> entries, string format = "")
         {
-            IAddressBookOutput addressBook = AddressBookSingleton.GetInstance().GetOutput(output);
-            foreach (KeyValuePair<string, Address> entry in entries)
-            {
-                Console.WriteLine(addressBook.ToString(entry));
-            }
+            format = format.ToUpper();
+            IAddressBookOutput addressBook = AddressBookSingleton.GetInstance().GetOutput(format);
+
+            Console.WriteLine(addressBook.ToString(entries));
         }
 
         /// <summary>

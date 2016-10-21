@@ -6,34 +6,35 @@ using System.Threading.Tasks;
 
 namespace AddressBook
 {
-    class AddressBookOutputXml : IAddressBookOutput
+    class AddressBookOutputJson : IAddressBookOutput
     {
-        public string GetLine(KeyValuePair<string, Address> address)
+        private string GetLine(KeyValuePair<string, Address> address)
         {
-            string output = "  <entry>";
+            string output = "{";
             output += System.Environment.NewLine;
-            output += String.Format("    <name>{0}</name>", address.Key);
-            output += System.Environment.NewLine;
+            output += String.Format("  \"{0}\" : \"{1}\"", "name", address.Key);
             foreach (KeyValuePair<string, string> prop in address.Value.GetAddress())
             {
-                output += String.Format("    <{0}>{1}</{0}>", prop.Key, prop.Value);
+                output += ",";
                 output += System.Environment.NewLine;
-            }
-            output += "  </entry>";
-            return output;
-        }
-
-        public string ToString(Dictionary<string, Address> addressBook)
-        {
-            string output = "<items>";
-            for (int i = 0; i < addressBook.Count; ++i)
-            {
-                output += System.Environment.NewLine;
-                output += GetLine(addressBook.ElementAt(i));
+                output += String.Format("  \"{0}\" : \"{1}\"", prop.Key, prop.Value);
             }
             output += System.Environment.NewLine;
-            output += "</items>";
+            output += "}";
             return output;
-        }        
+        }
+        public string ToString(Dictionary<string, Address> addressBook)
+        {
+            string output = "[";
+            for (int i = 0; i < addressBook.Count; ++i)
+            {
+                output += GetLine(addressBook.ElementAt(i));
+
+                if (i != (addressBook.Count - 1))
+                    output += ",";
+            }
+            output += "]";
+            return output;
+        }
     }
 }

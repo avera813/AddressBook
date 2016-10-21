@@ -46,6 +46,7 @@
     <Compile Include="Address.cs" />
     <Compile Include="AddressBook.cs" />
     <Compile Include="AddressBookFormatter.cs" />
+    <Compile Include="AddressBookOutputJson.cs" />
     <Compile Include="AddressBookOutputText.cs" />
     <Compile Include="AddressBookOutputXml.cs" />
     <Compile Include="AddressBookSingleton.cs" />
