@@ -138,8 +138,7 @@ namespace AddressBook
                 if (args.Length != 3)
                     Usage(ConsoleCommand.Remove);
 
-                string name = args[1];
-
+                string name = args[2];
                 contacts.Remove(name);
                 WriteFile(fileName);
             }

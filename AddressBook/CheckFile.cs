@@ -20,13 +20,26 @@ namespace AddressBook
             }
             catch (DirectoryNotFoundException)
             {
-                if(!ignoreNotFound)
+                if (ignoreNotFound)
+                {
+                    Directory.CreateDirectory(Directory.GetParent(@fileName).ToString());
+                    fs = new FileStream(@fileName, FileMode.OpenOrCreate);
+                }
+                else
+                {
                     throw new DirectoryNotFoundException("Cannot find directory: " + fileName);
+                }
             }
             catch (FileNotFoundException)
             {
-                if(!ignoreNotFound)
+                if (ignoreNotFound)
+                {
+                    fs = new FileStream(@fileName, FileMode.OpenOrCreate);
+                }
+                else
+                {
                     throw new FileNotFoundException("Cannot find file: " + fileName);
+                }
             }
             catch (UnauthorizedAccessException)
             {
@@ -44,7 +57,8 @@ namespace AddressBook
             }
             catch (DirectoryNotFoundException)
             {
-                Directory.CreateDirectory(fileName);
+                Directory.CreateDirectory(Directory.GetParent(@fileName).ToString());
+                fs = new FileStream(@fileName, FileMode.OpenOrCreate);
             }
             catch (UnauthorizedAccessException)
             {

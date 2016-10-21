@@ -13,41 +13,63 @@ namespace AddressBook
     {
         public static void Serialize(string fileName, AddressBook contacts)
         {
-            try
+            if( File.Exists(@fileName) || contacts.GetAll().Count > 0)
             {
-                FileStream fs = CheckFile.GetWriteFileStream(fileName);
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(fs, contacts);
-                fs.Close();
-            }
-            catch (SerializationException ex)
-            {
-                throw new Exception("Failed to write contents of file. Reason: " + ex.Message);
-            }
-            catch (Exception)
-            {
-                throw;
+                try
+                {
+                    FileStream fs = CheckFile.GetWriteFileStream(fileName);
+                    if (contacts.GetAll().Count > 0)
+                    {
+                        try
+                        {
+                            BinaryFormatter bf = new BinaryFormatter();
+                            bf.Serialize(fs, contacts);
+                        }
+                        catch (SerializationException ex)
+                        {
+                            throw new Exception("Failed to write contents of file. Reason: " + ex.Message);
+                        }
+                        finally
+                        {
+                            fs.Close();
+                        }
+                    }
+                    else
+                    {
+                        fs.Close();
+                        File.Delete(@fileName);
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
         public static AddressBook Deserialize(string fileName, bool ignoreNotFound)
         {
-            AddressBook contacts;
+            AddressBook contacts = new AddressBook();
             try
             {
                 FileStream fs = CheckFile.GetReadFileStream(fileName, ignoreNotFound);
-                BinaryFormatter bf = new BinaryFormatter();
-                contacts = (AddressBook)bf.Deserialize(fs);
-                fs.Close();
-            }
-            catch (ArgumentNullException)
-            {
-                contacts = new AddressBook();
-            }
-            catch (SerializationException ex)
-            {
-                throw new SerializationException("Failed to read contents of file. Reason: " + ex.Message);
-            }
+                try
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    contacts = (AddressBook)bf.Deserialize(fs);
+                }
+                catch (SerializationException ex)
+                {
+                    if(!ignoreNotFound)
+                    {
+                        throw new SerializationException("Failed to read contents of file. Reason: " + ex.Message);
+                    }
+                }
+                finally
+                {
+                    fs.Close();
+                } 
+            } 
             catch (Exception)
             {
                 throw;
