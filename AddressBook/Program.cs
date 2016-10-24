@@ -22,6 +22,7 @@ namespace AddressBook
             {
                 case ConsoleCommand.ADD:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" add \"John Smith, 123 Fake St., Seattle, WA, 98101, USA\"");
+                    Console.WriteLine("       If file does not exist, a new file will be created.");
                     break;
                 case ConsoleCommand.UPDATE:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" update \"John Smith\" street \"456 Superior St.\"");
@@ -31,15 +32,15 @@ namespace AddressBook
                     break;
                 case ConsoleCommand.FIND:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" find name \"John\"");
-                    Console.WriteLine("    seach by: name, street, city, state, zip, or country");
+                    Console.WriteLine("       Seach by: name, street, city, state, zip, or country");
                     break;
                 case ConsoleCommand.SORT:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" sort name");
-                    Console.WriteLine("    sort by: name, street, city, state, zip, or country");
+                    Console.WriteLine("       Sort by: name, street, city, state, zip, or country");
                     break;
                 case ConsoleCommand.PRINT:
                     Console.WriteLine("Usage: AddressBook \"addressbook.dat\" print [format]");
-                    Console.WriteLine("    Format is optional. Available formats: JSON, XML, TEXT");
+                    Console.WriteLine("       Field [format] is optional. Available formats: JSON, XML, TEXT");
                     break;
                 default:
                     Console.WriteLine("Usage: AddressBook \"[filename]\" [command] ");
