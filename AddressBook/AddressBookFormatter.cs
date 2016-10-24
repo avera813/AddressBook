@@ -11,6 +11,8 @@ namespace AddressBook
 {
     class AddressBookFormatter
     {
+        private AddressBookFormatter() { }
+
         public static void Serialize(string fileName, AddressBook contacts)
         {
             if( File.Exists(@fileName) || contacts.GetAll().Count > 0)
@@ -27,7 +29,7 @@ namespace AddressBook
                         }
                         catch (SerializationException ex)
                         {
-                            throw new Exception("Failed to write contents of file. Reason: " + ex.Message);
+                            throw new SerializationException("Failed to write contents of file. Reason: " + ex.Message);
                         }
                         finally
                         {
@@ -64,6 +66,10 @@ namespace AddressBook
                     {
                         throw new SerializationException("Failed to read contents of file. Reason: " + ex.Message);
                     }
+                }
+                catch(InvalidCastException)
+                {
+                    throw new InvalidCastException("The file does not contain valid AddressBook objects.");
                 }
                 finally
                 {

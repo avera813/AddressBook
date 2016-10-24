@@ -9,6 +9,8 @@ namespace AddressBook
 {
     class CheckFile
     {
+        private CheckFile() { }
+
         public static FileStream GetReadFileStream(string fileName, bool ignoreNotFound)
         {
             FileStream fs = null;
